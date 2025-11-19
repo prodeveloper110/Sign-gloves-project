@@ -1,0 +1,85 @@
+#include "SoftwareSerial.h"
+#include "DFRobotDFPlayerMini.h"
+
+DFRobotDFPlayerMini myDFPlayer;
+SoftwareSerial mySoftwareSerial(9, 10);
+
+// Separate variables for each flex sensor reading
+int flex1, flex2, flex3, flex4, flex5;
+
+// You can set different thresholds for each sensor
+int th1 = 751;
+int th2 = 751;
+int th3 = 740;
+int th4 = 760;
+int th5 = 751;
+
+void setup() {
+  Serial.begin(9600);
+  mySoftwareSerial.begin(9600);
+
+  Serial.println("Initializing DFPlayer...");
+  if (!myDFPlayer.begin(mySoftwareSerial)) {
+    Serial.println(F("DFPlayer not detected!"));
+    while (1);
+  }
+
+  myDFPlayer.volume(25);
+  Serial.println("DFPlayer Ready.");
+}
+
+void loop() {
+
+  // Read all sensors separately
+  flex1 = analogRead(A1);
+  flex2 = analogRead(A2);
+  flex3 = analogRead(A3);
+  flex4 = analogRead(A4);
+  flex5 = analogRead(A5);
+
+  // Print for debugging
+  Serial.print("Flex1: "); Serial.println(flex1);
+  Serial.print("Flex2: "); Serial.println(flex2);
+  Serial.print("Flex3: "); Serial.println(flex3);
+  Serial.print("Flex4: "); Serial.println(flex4);
+  Serial.print("Flex5: "); Serial.println(flex5);
+  Serial.println("---------------------------");
+
+  // Check each sensor based on its threshold
+  if (flex1 > th1) {
+    Serial.println("flex1 > th1");
+    myDFPlayer.play(1);
+    delay(1200);
+    delay(2000);
+  }
+  
+  if (flex2 > th2) {
+    Serial.println("flex2 > th2");
+    myDFPlayer.play(2);
+    delay(1200);
+    delay(2000);
+  }
+  
+  if (flex3 > th3) {
+    Serial.println("flex3 > th3");
+    myDFPlayer.play(3);
+    delay(1200);
+    delay(2000);
+  }
+  
+  if (flex4 > th4) {
+    Serial.println("flex4 > th4");
+    myDFPlayer.play(4);
+    delay(1200);
+    delay(2000);
+  }
+  
+  if (flex5 > th5) {
+    Serial.println("flex5 > th5");
+    myDFPlayer.play(5);
+    delay(1200);
+    delay(2000);
+  }
+
+  delay(500);
+}
