@@ -4,15 +4,17 @@
 DFRobotDFPlayerMini myDFPlayer;
 SoftwareSerial mySoftwareSerial(9, 10);
 
-// Separate variables for each flex sensor reading
 int flex1, flex2, flex3, flex4, flex5;
 
-// You can set different thresholds for each sensor
-int th1 = 751;
-int th2 = 751;
-int th3 = 740;
-int th4 = 760;
-int th5 = 751;
+// UPDATED THRESHOLDS BASED ON YOUR DATA
+// I calculated these to be slightly higher than your "Straight" values.
+// Logic: Threshold = Straight Value + 3 to 5 points buffer.
+
+int th1 = 763; // Your Straight was 759. Bent is 767.
+int th2 = 761; // Your Straight was 757. Bent is 765.
+int th3 = 748; // Your Straight was 745. Bent is 752.
+int th4 = 772; // Your Straight was 767. Bent is 785.
+int th5 = 762; // Your Straight was 758. Bent is 762. (Very sensitive!)
 
 void setup() {
   Serial.begin(9600);
@@ -23,63 +25,68 @@ void setup() {
     Serial.println(F("DFPlayer not detected!"));
     while (1);
   }
-
   myDFPlayer.volume(25);
   Serial.println("DFPlayer Ready.");
+  
+  // Display the hardcoded thresholds for verification
+  Serial.println("System Ready. Thresholds set to:");
+  Serial.print("TH1 (>): "); Serial.println(th1);
+  Serial.print("TH2 (>): "); Serial.println(th2);
+  Serial.print("TH3 (>): "); Serial.println(th3);
+  Serial.print("TH4 (>): "); Serial.println(th4);
+  Serial.print("TH5 (>): "); Serial.println(th5);
+  Serial.println("---------------------------");
 }
 
 void loop() {
-
-  // Read all sensors separately
+  // Read sensors
   flex1 = analogRead(A1);
   flex2 = analogRead(A2);
   flex3 = analogRead(A3);
   flex4 = analogRead(A4);
   flex5 = analogRead(A5);
 
-  // Print for debugging
-  Serial.print("Flex1: "); Serial.println(flex1);
-  Serial.print("Flex2: "); Serial.println(flex2);
-  Serial.print("Flex3: "); Serial.println(flex3);
-  Serial.print("Flex4: "); Serial.println(flex4);
-  Serial.print("Flex5: "); Serial.println(flex5);
-  Serial.println("---------------------------");
+  // LOGIC UPDATED: Used '>' because your values go UP when bent.
 
-  // Check each sensor based on its threshold
+  // Check Sensor 1
   if (flex1 > th1) {
-    Serial.println("flex1 > th1");
+    Serial.println("Action: Finger 1 Bent");
     myDFPlayer.play(1);
-    delay(1200);
-    delay(2000);
+    delay(1200); 
+    delay(1000);
   }
   
-  if (flex2 > th2) {
-    Serial.println("flex2 > th2");
+  // Check Sensor 2
+  else if (flex2 > th2) {
+    Serial.println("Action: Finger 2 Bent");
     myDFPlayer.play(2);
     delay(1200);
-    delay(2000);
+    delay(1000);
   }
   
-  if (flex3 > th3) {
-    Serial.println("flex3 > th3");
+  // Check Sensor 3
+  else if (flex3 > th3) {
+    Serial.println("Action: Finger 3 Bent");
     myDFPlayer.play(3);
     delay(1200);
-    delay(2000);
+    delay(1000);
   }
   
-  if (flex4 > th4) {
-    Serial.println("flex4 > th4");
+  // Check Sensor 4
+  else if (flex4 > th4) {
+    Serial.println("Action: Finger 4 Bent");
     myDFPlayer.play(4);
     delay(1200);
-    delay(2000);
+    delay(1000);
   }
   
-  if (flex5 > th5) {
-    Serial.println("flex5 > th5");
+  // Check Sensor 5
+  else if (flex5 > th5) {
+    Serial.println("Action: Finger 5 Bent");
     myDFPlayer.play(5);
     delay(1200);
-    delay(2000);
+    delay(1000);
   }
 
-  delay(500);
+  delay(200); 
 }
